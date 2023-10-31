@@ -17,7 +17,9 @@ export class Fjax{
         if ( (!content && (this._method === "PUT" || this._method == "GET") ) || (content && (this._method === "POST" || this._method === "PUT" ))){
             const packet = new Packet(this._url, this._method, JSON.stringify(content))
             this._response = Network.sendRequest(packet)
-            this._onload.call(this)
+            if (this._onload){
+             this._onload.call(this)
+            }
         }
     }
     set onload(f){
