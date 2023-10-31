@@ -1,5 +1,5 @@
 import { Packet } from "./packet.js"
-
+import  * as db from "./DB.js"
 
 const fullTablePattern = /^\/api\/(users|plants)$/
 const singleItemPattern = /^\/api\/(users|plants)\/\d+$/
@@ -9,7 +9,7 @@ export const server = {
        const table = packet._url.split('/')[1]
        const content = JSON.parse(packet._content)
        let responseText;
-       if (packet._url.test(fullTablePattern))  {
+       if (fullTablePattern.test(packet._url))  {
         if (packet._method === "GET"){
             responseText = db.getTable(table)
         }
@@ -21,8 +21,8 @@ export const server = {
             })
         }
     }
-        else if(packet._url.test(singleItemPattern)){
-            const id = packet._url.split('/')[2]
+        else if(singleItemPattern.test(packet._url)){
+            const id = packet._url.split('/')[3]
             if (packet._method === "GET"){
                 responseText = db.getItem(table,id)
             }

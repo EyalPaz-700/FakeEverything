@@ -1,4 +1,7 @@
-class Fjax{
+import { Network } from "./network.js"
+import { Packet } from "./packet.js"
+
+export class Fjax{
     constructor(){
         this._url = undefined
         this._method = undefined
@@ -10,9 +13,9 @@ class Fjax{
         this._url = url
         this._method = method
     }
-    send(content = undefined){
+    send(content = ""){
         if ( (!content && (this._method === "PUT" || this._method == "GET") ) || (content && (this._method === "POST" || this._method === "PUT" ))){
-            const packet = new Packet(this._url, this._method, content)
+            const packet = new Packet(this._url, this._method, JSON.stringify(content))
             this._response = Network.sendRequest(packet)
             this._onload.call(this)
         }
