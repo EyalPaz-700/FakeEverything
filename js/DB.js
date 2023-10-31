@@ -1,5 +1,5 @@
 
-function resetDB() {
+export function resetDB() {
     if (!localStorage.getItem("users")) {
         const users = {
             count: 0,
@@ -19,7 +19,7 @@ function resetDB() {
 }
 
 //return data:
-function getItem(table, id) {
+export function getItem(table, id) {
     if (!localStorage.getItem(table)) {
         return undefined; //error
     }
@@ -33,7 +33,7 @@ function getItem(table, id) {
 }
 
 //add data:
-function addItem(table, item) {
+export function addItem(table, item) {
     if (!localStorage.getItem(table)) {
         return undefined; //error
     }
@@ -47,7 +47,7 @@ function addItem(table, item) {
 }
 
 //remove data:
-function removeItem(table, id) {
+export function removeItem(table, id) {
     if (!localStorage.getItem(table)) {
         return undefined; //error
     }
@@ -66,7 +66,7 @@ function removeItem(table, id) {
 }
 
 //modify data:
-function changeItemAttribute(table, id, attribute, value) {
+export function changeItemAttribute(table, id, attribute, value) {
     if (!localStorage.getItem(table)) {
         return undefined; //error
     }
@@ -81,8 +81,5 @@ function changeItemAttribute(table, id, attribute, value) {
     }
     return false; //no item with id found
 }
-
-
-
 
 window.onload = resetDB;
