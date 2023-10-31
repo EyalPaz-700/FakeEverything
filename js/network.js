@@ -8,7 +8,8 @@ export const Network =  {
             return packet;
         }
         else {
-            Server.receiveRequest(packet);
+            debugger
+            return Server.receiveRequest(packet);
         }
     }
 }

@@ -2,9 +2,14 @@
 export function resetDB() {
     if (!localStorage.getItem("users")) {
         const users = {
-            count: 0,
-            lastId: 0,
-            list: [],
+            count: 1,
+            lastId: 1,
+            list: [
+                {
+                    "id" : 1,
+                    "name" : "daksjdlasd"
+                }
+            ],
         }
         localStorage.setItem("users", JSON.stringify(users));
     }
@@ -27,16 +32,17 @@ export function getAll(table) {
 }
 
 export function getItem(table, id) {
+    debugger
     if (!localStorage.getItem(table)) {
         return undefined; //error
     }
     const list = JSON.parse(localStorage.getItem(table)).list;
-    for (let item in list) {
-        if (item.id === id) {
+    for (let item of list) {
+        if (item.id == id) {
             return item;
         }
     }
-    return false; //no item with id found
+    return "item was not found"; //no item with id found
 }
 
 //add data:
@@ -61,7 +67,7 @@ export function removeItem(table, id) {
     const data = JSON.parse(localStorage.getItem(table));
     const list = data.list;
     for (let i = 0; i < list.length; i++) {
-        if (list[i].id === id) {
+        if (list[i].id == id) {
             const item = list[i];
             list.splice(i, 1);
             data.count--;
@@ -80,7 +86,7 @@ export function changeItemAttribute(table, id, attribute, value) {
     const data = JSON.parse(localStorage.getItem(table));
     const list = data.list;
     for (let i = 0; i < list.length; i++) {
-        if (list[i].id === id) {
+        if (list[i].id == id) {
             list[i][attribute] = value;
             localStorage.setItem(table, JSON.stringify(data));
             return list[i];
@@ -88,5 +94,3 @@ export function changeItemAttribute(table, id, attribute, value) {
     }
     return false; //no item with id found
 }
-
-window.onload = resetDB;

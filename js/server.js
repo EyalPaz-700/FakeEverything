@@ -6,7 +6,8 @@ const singleItemPattern = /^\/api\/(users|plants)\/\d+$/
 
 export const server = {
     receiveRequest : function(packet){
-       const table = packet._url.split('/')[1]
+        debugger
+       const table = packet._url.split('/')[2]
        const content = JSON.parse(packet._content)
        let responseText;
        if (fullTablePattern.test(packet._url))  {
