@@ -6,8 +6,9 @@ export function resetDB() {
             lastId: 1,
             list: [
                 {
-                    "id" : 1,
-                    "name" : "daksjdlasd"
+                    id: 1,
+                    name: "daksjdlasd",
+                    plants: [],
                 }
             ],
         }
@@ -15,9 +16,12 @@ export function resetDB() {
     }
     if (!localStorage.getItem("plants")) {
         const plants = {
-            count: 0,
-            lastId: 0,
-            list: [],
+            count: 1,
+            lastId: 1,
+            list: [{
+                name: "flower",
+                id: 1,
+            }],
         }
         localStorage.setItem("plants", JSON.stringify(plants));
     }
@@ -32,7 +36,6 @@ export function getAll(table) {
 }
 
 export function getItem(table, id) {
-    debugger
     if (!localStorage.getItem(table)) {
         return undefined; //error
     }
@@ -93,4 +96,29 @@ export function changeItemAttribute(table, id, attribute, value) {
         }
     }
     return false; //no item with id found
+}
+
+//buy plant
+export function addNewPlant(id, plant_id) {
+    const data = JSON.parse(localStorage.getItem("users"));
+    const users = data.list;
+    for (let user of users) {
+        if (user.id == id) {
+            user.plants.push(`/api/plants/${plant_id}`);
+            localStorage.setItem("users", JSON.stringify(data));
+            return user.plants;
+        }
+    }
+    return false; //no user with id found
+}
+
+//return a property of item
+export function getItemProp(table, id, prop) {
+    let dataList = getAll(table);
+    for (let item of dataList) {
+        if (item.id == id) {
+            return item[prop];
+        }
+    }
+    return false; //no user with id found
 }
