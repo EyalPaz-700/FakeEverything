@@ -3,11 +3,12 @@ export class Network {
         this.traffic = [];
     }
     sendRequest(packet) {
+        const des = packet.url;
         if (url === "/client/") {
             return packet;
         }
         else {
-            return Server.receiveRequest(packet);
+            Server.receiveRequest(packet);
         }
     }
 }
