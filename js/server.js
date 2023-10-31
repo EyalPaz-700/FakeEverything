@@ -1,4 +1,4 @@
-import { Packet } from "./packet"
+import { Packet } from "./packet.js"
 
 const fullTablePattern = /^\/api\/(users|plants)$/
 const singleItemPattern = /^\/api\/(users|plants)\/\d+$/
