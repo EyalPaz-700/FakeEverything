@@ -19,6 +19,13 @@ export function resetDB() {
 }
 
 //return data:
+export function getItem(table) {
+    if (!localStorage.getItem(table)) {
+        return undefined; //error
+    }
+    return list = JSON.parse(localStorage.getItem(table)).list;
+}
+
 export function getItem(table, id) {
     if (!localStorage.getItem(table)) {
         return undefined; //error

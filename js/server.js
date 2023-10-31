@@ -1,10 +1,11 @@
 import { Packet } from "./packet.js"
 
+
 const fullTablePattern = /^\/api\/(users|plants)$/
 const singleItemPattern = /^\/api\/(users|plants)\/\d+$/
 
 export const server = {
-    recieveRequest : function(packet){
+    receiveRequest : function(packet){
        const table = packet._url.split('/')[1]
        const content = JSON.parse(packet._content)
        let responseText;
