@@ -6,7 +6,6 @@ const singleItemPattern = /^\/api\/(users|plants)\/\d+$/
 
 export const server = {
     receiveRequest : function(packet){
-        debugger
        const table = packet._url.split('/')[2]
        const content = JSON.parse(packet._content)
        let responseText;

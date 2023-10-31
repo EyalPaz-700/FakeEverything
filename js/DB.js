@@ -32,7 +32,6 @@ export function getAll(table) {
 }
 
 export function getItem(table, id) {
-    debugger
     if (!localStorage.getItem(table)) {
         return undefined; //error
     }

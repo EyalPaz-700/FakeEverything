@@ -5,4 +5,4 @@ resetDB()
 const a = new Fjax()
 a.open("/api/users/1","GET")
 a.send()
-debugger
+console.log(a)
