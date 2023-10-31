@@ -1,5 +1,5 @@
-class Packet {
-    constructor(url, content, method) {
+export class Packet {
+    constructor(url, method, content = undefined) {
         this._url = url;
         this._content = content;
         this._method = method;
