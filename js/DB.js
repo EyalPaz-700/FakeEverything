@@ -16,20 +16,20 @@ export function resetDB() {
     }
     if (!localStorage.getItem("plants")) {
         const plants = {
-            count: 3,
-            lastId: 3,
-            list: [{
-                name: "flower",
-                id: 1,
-            }, {
-                name: "den",
-                id: 2,
-            }, {
-                name: "dem",
-                id: 3,
-            }],
+            count: 0,
+            lastId: 0,
+            list: [],
         }
+        fillPLants();
         localStorage.setItem("plants", JSON.stringify(plants));
+    }
+
+    function fillPLants() {
+        plantsSrc = [];
+        plantsNames = [];
+        for (let i = 0; i<14; i++) {
+
+        }
     }
 }
 
