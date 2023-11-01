@@ -16,11 +16,17 @@ export function resetDB() {
     }
     if (!localStorage.getItem("plants")) {
         const plants = {
-            count: 1,
-            lastId: 1,
+            count: 3,
+            lastId: 3,
             list: [{
                 name: "flower",
                 id: 1,
+            }, {
+                name: "den",
+                id: 2,
+            }, {
+                name: "dem",
+                id: 3,
             }],
         }
         localStorage.setItem("plants", JSON.stringify(plants));

@@ -14,11 +14,15 @@ export const server = {
                 responseText = db.getAll(table)
             }
             if (packet._method === "POST") {
-                responseText = db.addUser(table, {
-                    username: content.username,
-                    password: content.password,
-                    plants: []
-                })
+                if (content.value) {
+                    responseText = db.getAllMatches(table, content.value, content.prop);
+                }
+                else if (content.pageNum) {
+                    responseText = db.getPage(content.pageNum);
+                }
+                else {
+                    responseText = db.addItem(table, content);
+                }
             }
         }
         else if (singleItemPattern.test(packet._url)) {
@@ -42,7 +46,6 @@ export const server = {
             if (packet._method === "POST") {
                 responseText = db.getItemProp(table, id, content.prop);
             }
-
         }
 
         return new Packet("/client/", packet._method, responseText)
