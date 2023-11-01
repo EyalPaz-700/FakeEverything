@@ -2,7 +2,6 @@ import { Fjax } from "./fjax.js";
 import { resetDB } from "./DB.js";
 
 let currentUser = JSON.parse(localStorage.getItem("currentUser"))
-let currentUser = JSON.parse(localStorage.getItem("currentUser"))
 let currentPage;
 
 const templates = {
@@ -39,7 +38,7 @@ submitButton.onclick = () => {
         if (req._response._content){
             currentPage = 1
             localStorage.setItem("currentUser", JSON.stringify(req._response._content))
-            currentUser = req._response._content
+            currentUser = req._response._content;
             movePage("homeTemplate")
         }
         else {
@@ -79,7 +78,8 @@ function movePage(template) {
         defineLoginOnClicks()
     }
     if (template === "homeTemplate") {
-        document.getElementById("username").innerText += " " + currentUser.name;
+        console.log(currentUser);
+        document.getElementById("username").innerText += " " + currentUser.userName;
         fetchPlants(1)
         defineNavOnClicks()
         defineHomeOnClicks()
@@ -89,8 +89,8 @@ function movePage(template) {
     }
     if (template === "profileTemplate") {
         fetchUserPlants();
-        document.getElementById("username").innerText += " " + currentUser.name;
-        document.getElementById("profile-header").innerText =  `${currentUser.name}'s Plants`;
+        document.getElementById("username").innerText += " " + currentUser.userName;
+        document.getElementById("profile-header").innerText =  `${currentUser.userName}'s Plants`;
         defineNavOnClicks()
         document.getElementById('home-nav').classList.remove("current-page");
         document.getElementById('profile-nav').classList.add("current-page");
