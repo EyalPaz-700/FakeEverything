@@ -148,6 +148,7 @@ function defineHomeOnClicks() {
 }
 
 function nextPage() {
+    debugger
     if (currentPage < 3) {
         currentPage++;
         fetchPlants(currentPage)
@@ -191,8 +192,32 @@ function fetchUserPlants() {
 }
 
 function searchPlants() {
+    const plantContainer = document.getElementById('item-container')
     const searchInput = document.getElementById("search").value;
+    if (!searchInput) {
+        return;
+    }
     document.getElementById("search").value = "";
+    const MatchPlants = new Fjax();
+    MatchPlants.open("/api/plants", "POST");
+    MatchPlants.send({value: searchInput.toLowerCase(), prop: "name"});
+    const resultPlants = MatchPlants._response._content;
+    plantContainer.innerHTML = "";
+    for (let i = 0; i < resultPlants.length; i++) {
+        plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content);
+        plantContainer.children[i].children[0].firstElementChild.src = resultPlants[i].src;
+        plantContainer.children[i].children[1].innerText = resultPlants[i].name;
+        plantContainer.children[i].children[2].onclick = () => {
+            const rx = new Fjax()
+            rx.open("/api/users/" + currentUser.id, "PUT")
+            rx.send({
+                attribute: "plants",
+                plant_id: flower.id
+            })
+            currentUser.plants = rx._response._content;
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        }
+    }
 }
 
 initApp()

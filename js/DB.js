@@ -88,7 +88,7 @@ export function getAllMatches(table, value, prop = "name") {
         return undefined; //error
     }
     for (let item of dataList) {
-        if (item[prop].includes(value)) {
+        if (item[prop].toLowerCase().includes(value)) {
             result.push(item);
         }
     }

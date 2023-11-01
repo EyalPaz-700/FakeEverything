@@ -15,6 +15,9 @@ export const server = {
             }
             if (packet._method === "POST") {
                 if (content.value) {
+                    if (content.value == "noSearchInput") {
+                        responseText = db.getPage(content.pageNum);
+                    }
                     responseText = db.getAllMatches(table, content.value, content.prop);
                 }
                 else if (content.pageNum) {
