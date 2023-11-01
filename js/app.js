@@ -2,6 +2,7 @@ import { Fjax } from "./fjax.js";
 import { resetDB } from "./DB.js";
 
 let currentUser = JSON.parse(localStorage.getItem("currentUser"))
+let currentUser = JSON.parse(localStorage.getItem("currentUser"))
 let currentPage;
 
 const templates = {
@@ -10,6 +11,7 @@ const templates = {
     plantTemplate: document.getElementById('plant-temp'),
     profileTemplate: document.getElementById('my-profile-temp')
 }
+
 
 function initApp() {
     document.body.appendChild(templates.loginTemplate.cloneNode(true).content)
@@ -21,22 +23,44 @@ function initApp() {
 }
 
 function defineLoginOnClicks() {
-    const loginBtn = document.getElementById('login-btn')
-    loginBtn.onclick = () => {
-        localStorage.setItem("currentUser", JSON.stringify({
-            id: 1,
-            name: "daksjdlasd",
-            plants: [],
-        }))
-        currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        currentPage = 1
-        movePage("homeTemplate");
+    const usernameInput = document.getElementById('username')
+const passwordInput = document.getElementById('password')
+const submitButton = document.getElementById('login-btn')
+
+submitButton.onclick = () => {
+    const req = new Fjax()
+    req.open('/api/users', 'POST')
+    if (usernameInput.value.trim().length > 0 && passwordInput.value.trim().length > 0 ) 
+    {
+        req.send({
+            userName : usernameInput.value.trim(),
+            password : passwordInput.value.trim()
+        })
+        if (req._response._content){
+            currentPage = 1
+            localStorage.setItem("currentUser", JSON.stringify(req._response._content))
+            currentUser = req._response._content
+            movePage("homeTemplate")
+        }
+        else {
+            alert("invalid username or password")
+        }
     }
+    else {
+        alert('length can not be zero')
+    }
+}
 }
 
 function defineNavOnClicks() {
     const homeNav = document.getElementById('home-nav')
     const profileNav = document.getElementById('profile-nav')
+    const logoutNav = document.getElementById('logout-nav')
+    logoutNav.onclick = () => {
+        currentUser = undefined
+        localStorage.getItem("currentUser", undefined)
+        movePage("loginTemplate")
+    }
     homeNav.onclick = () => {
         movePage("homeTemplate")
     }
@@ -109,13 +133,13 @@ function defineHomeOnClicks() {
 }
 
 function nextPage() {
-    if (currentPage) {
+    if (currentPage < 3) {
         currentPage++;
         fetchPlants(currentPage)
     }
 }
 function previousPage() {
-    if (currentPage && currentPage >= 2 && currentPage < 5) {
+    if ( currentPage >= 2) {
         currentPage--;
         fetchPlants(currentPage)
     }

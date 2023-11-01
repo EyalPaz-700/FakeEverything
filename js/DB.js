@@ -7,7 +7,8 @@ export function resetDB() {
             list: [
                 {
                     id: 1,
-                    name: "daksjdlasd",
+                    userName: "daksjdlasd",
+                    password : "test",
                     plants: ["/api/plants/1", "/api/plants/3"],
                 }
             ],
@@ -55,6 +56,16 @@ export function getAll(table) {
         return undefined; //error
     }
     return JSON.parse(localStorage.getItem(table)).list;
+}
+
+export function getUser(username,password){
+    const users = JSON.parse(localStorage.getItem('users')).list
+    for (const user of users){
+        if (user.userName === username && user.password === password){
+            return user
+        }
+    }
+    return false
 }
 
 export function getItem(table, id) {
