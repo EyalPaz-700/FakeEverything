@@ -1,4 +1,5 @@
 import { Packet } from "./packet.js"
+import { Network } from "./network.js"
 import * as db from "./DB.js"
 
 const fullTablePattern = /^\/api\/(users|plants)$/
@@ -47,7 +48,7 @@ export const server = {
 
             if (packet._method === "DELETE") {
                 if (content.plant_id) {
-                    responseText = db.removePlant(id, id);
+                    responseText = db.removePlant(id, content.plant_id);
                 }
                 else {
                     responseText = db.deleteItem(table, id)
@@ -59,7 +60,7 @@ export const server = {
             }
         }
 
-        return new Packet("/client/", packet._method, responseText)
+        return Network.sendRequest(new Packet("/client/", packet._method, responseText))
     }
 
 }
