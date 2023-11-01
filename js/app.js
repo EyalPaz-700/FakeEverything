@@ -1,7 +1,7 @@
 import { Fjax } from "./fjax.js";
 import { resetDB } from "./DB.js";
 
-const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+let currentUser = JSON.parse(localStorage.getItem("currentUser"))
 let currentPage;
 
 const templates = {
@@ -28,8 +28,9 @@ function defineLoginOnClicks() {
             name: "daksjdlasd",
             plants: [],
         }))
+        currentUser = JSON.parse(localStorage.getItem("currentUser"));
         currentPage = 1
-        movePage("homeTemplate")
+        movePage("homeTemplate");
     }
 }
 
@@ -89,6 +90,9 @@ function fetchPlants(pageNum) {
                 attribute: "plants",
                 plant_id: flower.id
             })
+            console.log(rx);
+            currentUser.plants = rx._response._content;
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
         }
     })
 
@@ -129,10 +133,22 @@ function fetchUserPlants() {
         reqPlant.open(userPlants[i], "GET");
         reqPlant.send();
         const plant = reqPlant._response._content;
-        plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content); ``
+        plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content);
+        const thisPlant =  plantContainer.children[i];
         plantContainer.children[i].children[0].firstElementChild.src = plant.src;
         plantContainer.children[i].children[1].innerText = plant.name;
-        plantContainer.children[i].removeChild(plantContainer.children[i].children[2])
+        plantContainer.children[i].children[2].innerText = "remove";
+        plantContainer.children[i].children[2].onclick = () => {
+            const rx = new Fjax()
+            rx.open("/api/users/" + currentUser.id, "DELETE")
+            rx.send({
+                plant_id: plant.id
+            })
+            console.log(rx);
+            plantContainer.removeChild(thisPlant);
+            currentUser.plants = rx._response._content;
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        }
     }
 }
 

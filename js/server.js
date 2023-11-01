@@ -40,7 +40,12 @@ export const server = {
             }
 
             if (packet._method === "DELETE") {
-                responseText = db.deleteItem(table, id)
+                if (content.plant_id) {
+                    responseText = db.removePlant(id, id);
+                }
+                else {
+                    responseText = db.deleteItem(table, id)
+                }
             }
 
             if (packet._method === "POST") {

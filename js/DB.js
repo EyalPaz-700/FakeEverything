@@ -148,6 +148,21 @@ export function addNewPlant(id, plant_id) {
     return false; //no user with id found
 }
 
+//remove plant
+export function removePlant(id, plant_id) {
+    const data = JSON.parse(localStorage.getItem("users"));
+    const users = data.list;
+    for (let user of users) {
+        if (user.id == id) {
+            const plantIndex =  user.plants.indexOf(`/api/plants/${plant_id}`);
+            user.plants.splice(plantIndex, 1);
+            localStorage.setItem("users", JSON.stringify(data));
+            return user.plants;
+        }
+    }
+    return false; //no user with id found
+}
+
 //return a property of item
 export function getItemProp(table, id, prop) {
     let dataList = getAll(table);
