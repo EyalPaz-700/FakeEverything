@@ -48,6 +48,20 @@ export function getItem(table, id) {
     return "item was not found"; //no item with id found
 }
 
+export function getAllMatches(table, value, prop = "name") {
+    const result = [];
+    const dataList = getAll(table);
+    if (!dataList) {
+        return undefined; //error
+    }
+    for (let item of dataList) {
+        if (item[prop].includes(value)) {
+            result.push(item);
+        }
+    }
+    return result;
+}
+
 //add data:
 export function addItem(table, item) {
     if (!localStorage.getItem(table)) {
@@ -121,4 +135,10 @@ export function getItemProp(table, id, prop) {
         }
     }
     return false; //no user with id found
+}
+
+//divide to pages: 
+export function getPage(pageNum, plantsInPage = 6) {
+    const plants = getAll("plants");
+    return plants.slice((pageNum - 1) * plantsInPage, pageNum * plantsInPage);
 }
