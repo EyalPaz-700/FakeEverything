@@ -8,7 +8,8 @@ const templates = {
     homeTemplate: document.getElementById('home-temp'),
     loginTemplate: document.getElementById('login-temp'),
     plantTemplate: document.getElementById('plant-temp'),
-    profileTemplate: document.getElementById('my-profile-temp')
+    profileTemplate: document.getElementById('my-profile-temp'),
+    profilePlantTemplate : document.getElementById('profile-plant-temp')
 }
 
 
@@ -141,6 +142,18 @@ function fetchPlants(pageNum) {
 
 }
 
+function convertListToMap(arr){
+    const obj = {}
+    for (const link of arr){
+        if (obj[link]){
+            obj[link] += 1
+        }
+        else{
+        obj[link] = 1 }
+    }
+    return obj
+}
+
 function defineHomeOnClicks() {
     {
         const nextPageBtn = document.getElementById('nextPage')
@@ -166,31 +179,35 @@ function previousPage() {
 
 function fetchUserPlants() {
     const plantContainer = document.getElementById('item-container')
+    plantContainer.innerHTML = ''
     const reqUserPlants = new Fjax();
     const userId = JSON.parse(localStorage.getItem("currentUser")).id;
     reqUserPlants.open(`/api/users/${userId}`, "POST");
     reqUserPlants.send({ prop: "plants" });
     const userPlants = reqUserPlants._response._content;
-    for (let i = 0; i < userPlants.length; i++) {
+    const x = convertListToMap(userPlants)
+    let i = 0;
+    for (const link in x) {
         const reqPlant = new Fjax;
-        reqPlant.open(userPlants[i], "GET");
+        reqPlant.open(link, "GET");
         reqPlant.send();
         const plant = reqPlant._response._content;
-        plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content);
+        plantContainer.appendChild(templates.profilePlantTemplate.cloneNode(true).content);
         const thisPlant =  plantContainer.children[i];
-        plantContainer.children[i].children[0].firstElementChild.src = plant.src;
-        plantContainer.children[i].children[1].innerText = plant.name;
-        plantContainer.children[i].children[2].innerText = "remove";
-        plantContainer.children[i].children[2].onclick = () => {
+        thisPlant.children[0].firstElementChild.src = plant.src;
+        thisPlant.children[1].innerText = plant.name;
+        thisPlant.children[2].textContent = x[link]
+        thisPlant.children[3].onclick = () => {
             const rx = new Fjax()
             rx.open("/api/users/" + currentUser.id, "DELETE")
             rx.send({
                 plant_id: plant.id
             })
-            plantContainer.removeChild(thisPlant);
             currentUser.plants = rx._response._content;
             localStorage.setItem("currentUser", JSON.stringify(currentUser));
+            fetchUserPlants()
         }
+        ++i;
     }
 }
 

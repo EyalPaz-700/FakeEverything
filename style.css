@@ -15,6 +15,16 @@ body {
     text-align: center;
 }
 
+#plant-count {
+    margin-top: 2%;
+    margin-left: 5%;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    border-radius: 50%;
+    color: white;
+    background-color: black;
+}
 .plant h3{
     font-size: 1rem;
 }
