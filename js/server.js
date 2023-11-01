@@ -20,6 +20,9 @@ export const server = {
                 else if (content.pageNum) {
                     responseText = db.getPage(content.pageNum);
                 }
+                else if (content.userName && content.password){
+                    responseText = db.getUser(content.userName,content.password)
+                }
                 else {
                     responseText = db.addItem(table, content);
                 }
