@@ -1,7 +1,7 @@
 import { Fjax } from "./fjax.js";
 import { resetDB } from "./DB.js";
 
-let currentUser = localStorage.getItem("currentUser") 
+let currentUser = JSON.parse(localStorage.getItem("currentUser")) 
 let currentPage;
 
 const templates = {
@@ -18,6 +18,7 @@ function initApp() {
         fetchPlants(1)
         defineNavOnClicks()
         defineHomeOnClicks()
+        document.getElementById("username").innerText += " " + currentUser.userName;
         currentPage = 1;
         document.getElementById('home-nav').classList.add("current-page");
         document.getElementById('profile-nav').classList.remove("current-page");
@@ -91,7 +92,6 @@ function movePage(template) {
         defineLoginOnClicks()
     }
     if (template === "homeTemplate") {
-        console.log(currentUser);
         document.getElementById("username").innerText += " " + currentUser.userName;
         fetchPlants(1)
         defineNavOnClicks()
