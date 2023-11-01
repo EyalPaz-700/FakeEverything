@@ -215,7 +215,7 @@ function searchPlants() {
             rx.open("/api/users/" + currentUser.id, "PUT")
             rx.send({
                 attribute: "plants",
-                plant_id: flower.id
+                plant_id: resultPlants[i].id
             })
             currentUser.plants = rx._response._content;
             localStorage.setItem("currentUser", JSON.stringify(currentUser));
