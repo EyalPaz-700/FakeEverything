@@ -116,7 +116,6 @@ function previousPage() {
         currentPage--;
         fetchPlants(currentPage)
     }
-
 }
 
 function fetchUserPlants() {
