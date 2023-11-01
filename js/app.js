@@ -1,7 +1,7 @@
 import { Fjax } from "./fjax.js";
 import { resetDB } from "./DB.js";
 
-let currentUser = JSON.parse(localStorage.getItem("currentUser"))
+let currentUser = localStorage.getItem("currentUser") ? JSON.parse(localStorage.getItem("currentUser")) : undefined
 let currentPage;
 
 const templates = {
@@ -13,12 +13,24 @@ const templates = {
 
 
 function initApp() {
+    if (currentUser){
+        document.body.appendChild(templates.homeTemplate.cloneNode(true).content)
+        fetchPlants(1)
+        defineNavOnClicks()
+        defineHomeOnClicks()
+        document.getElementById('home-nav').classList.add("current-page");
+        document.getElementById('profile-nav').classList.remove("current-page");
+        history.pushState({ page: "home" }, "home", "#" + "home")
+    }
+    else {
     document.body.appendChild(templates.loginTemplate.cloneNode(true).content)
     history.pushState({ page: "login" }, "login", "#" + "login")
     defineLoginOnClicks()
     window.onhashchange = () => {
         movePage(history.state.page + "Template")
     }
+}
+    
 }
 
 function defineLoginOnClicks() {
@@ -57,7 +69,7 @@ function defineNavOnClicks() {
     const logoutNav = document.getElementById('logout-nav')
     logoutNav.onclick = () => {
         currentUser = undefined
-        localStorage.getItem("currentUser", undefined)
+        localStorage.removeItem("currentUser")
         movePage("loginTemplate")
     }
     homeNav.onclick = () => {
