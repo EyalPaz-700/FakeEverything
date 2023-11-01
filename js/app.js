@@ -136,6 +136,11 @@ function fetchPlants(pageNum) {
             })
             currentUser.plants = rx._response._content;
             localStorage.setItem("currentUser", JSON.stringify(currentUser));
+            const confirmMsg = document.getElementById('confirmMsg');
+            confirmMsg.style.animation = 'none';
+            confirmMsg.offsetHeight;
+            confirmMsg.style.animation = null; 
+            confirmMsg.style.display = 'block';
         }
     })
 
@@ -236,6 +241,11 @@ function searchPlants() {
             })
             currentUser.plants = rx._response._content;
             localStorage.setItem("currentUser", JSON.stringify(currentUser));
+            const confirmMsg = document.getElementById('confirmMsg');
+            confirmMsg.style.animation = 'none';
+            confirmMsg.offsetHeight;
+            confirmMsg.style.animation = null; 
+            confirmMsg.style.display = 'block';
         }
     }
 }

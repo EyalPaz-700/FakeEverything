@@ -229,3 +229,35 @@ nav div h1 {
 #search-img{
     width: 5vh;
 }
+
+#confirmMsg {
+    z-index: 20;
+    position: fixed;
+    top: 30%;
+    right: 0;
+    display: none;
+    width: 200px;
+    background-color: #3F612D;
+    color: white;
+    padding: 1%;
+    animation-name: confirmP;
+    animation-duration: 3s; 
+    animation-fill-mode: forwards;
+}
+
+@keyframes confirmP {
+    0% {
+        transform: translateX(100%);
+        opacity: 1;
+    }
+    
+    50% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(100%);
+        display: none;
+    }
+}
