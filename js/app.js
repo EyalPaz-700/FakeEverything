@@ -80,7 +80,7 @@ function fetchPlants(pageNum) {
     })
     request._response._content.forEach((flower, index) => {
         plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content)
-        plantContainer.children[index].children[0].src = ""
+        plantContainer.children[index].children[0].firstElementChild.src = flower.src;
         plantContainer.children[index].children[1].textContent = flower.name
         plantContainer.children[index].children[2].onclick = () => {
             const rx = new Fjax()
@@ -97,7 +97,6 @@ function fetchPlants(pageNum) {
 
 function defineHomeOnClicks() {
     {
-        debugger
         const nextPageBtn = document.getElementById('nextPage')
         const previousPageBtn = document.getElementById('previousPage')
         nextPageBtn.onclick = nextPage
@@ -131,7 +130,7 @@ function fetchUserPlants() {
         reqPlant.send();
         const plant = reqPlant._response._content;
         plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content); ``
-        plantContainer.children[i].children[0].src = "";
+        plantContainer.children[i].children[0].firstElementChild.src = plant.src;
         plantContainer.children[i].children[1].innerText = plant.name;
         plantContainer.children[i].removeChild(plantContainer.children[i].children[2])
     }

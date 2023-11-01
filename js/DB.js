@@ -20,15 +20,31 @@ export function resetDB() {
             lastId: 0,
             list: [],
         }
-        fillPLants();
         localStorage.setItem("plants", JSON.stringify(plants));
+        fillPLants();
     }
 
     function fillPLants() {
-        plantsSrc = [];
-        plantsNames = [];
-        for (let i = 0; i<14; i++) {
+        const plantsSrc = [
+            "../media/Alstroemeria_aurea.jpg",
+            "../media/Clintonia_uniflora.JPG",
+            "../media/Cucko.jpg",
+            "../media/Dahlia._Erika_Krause.jpg",
+            "../media/Desert-rose.jpg",
+            "../media/Foxglove.jpeg",
+            "../media/Gerbera_farben.JPG",
+            "../media/Paeonia_suffruticosa.jpg",
+            "../media/Rose_Amber.jpg",
+            "../media/Star_Gazer_Lily.JPG",
+            "../media/Tiger_Lily.JPG",
+            "../media/trumpet_vine.jpg",
+            "../media/White_Dutch_irises.jpg",
+            "../media/WhiteGazania.JPG"
+        ];
+        const plantsNames = ["Alestromeria Aurea", "Clintonia", "Cucko", "Erika Krause", "Desert Rose", "Fox Glove", "Gerbera", "Paeonia", "Rose Amber", "Star Gazer Lily", "Tiger Lily", "Trumpet Vine", "White Dutch Irise", "White Gazania"];
 
+        for (let i = 0; i < plantsNames.length; i++) {
+            addItem("plants", { name: plantsNames[i], src: plantsSrc[i] });
         }
     }
 }
