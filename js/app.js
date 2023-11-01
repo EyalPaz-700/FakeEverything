@@ -1,6 +1,9 @@
 import { Fjax } from "./fjax.js";
 import { resetDB } from "./DB.js";
 
+const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+let currentPage;
+
 const templates = {
     homeTemplate: document.getElementById('home-temp'),
     loginTemplate: document.getElementById('login-temp'),
@@ -25,6 +28,7 @@ function defineLoginOnClicks() {
             name: "daksjdlasd",
             plants: [],
         }))
+        currentPage = 1
         movePage("homeTemplate")
     }
 }
@@ -54,6 +58,7 @@ function movePage(template) {
     if (template === "homeTemplate") {
         fetchPlants(1)
         defineNavOnClicks()
+        defineHomeOnClicks()
 
     }
     if (template === "profileTemplate") {
@@ -66,6 +71,49 @@ function movePage(template) {
 
 function fetchPlants(pageNum) {
     const plantContainer = document.getElementById('item-container')
+    plantContainer.innerHTML = ''
+    const request = new Fjax()
+    request.open("/api/plants", "POST")
+    request.send({
+        pageNum : pageNum
+    })
+    request._response._content.forEach( (flower,index) => {
+        plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content)
+        plantContainer.children[index].children[0].src = ""
+        plantContainer.children[index].children[1].textContent = flower.name
+        plantContainer.children[index].children[2].onclick = () => {
+            const rx = new Fjax()
+            rx.open( "/api/users/" + currentUser.id, "PUT")
+            rx.send({
+                attribute : "plants",
+                plant_id : flower.id
+            })
+        }
+        })
+    
+
+}
+
+function defineHomeOnClicks(){{
+    debugger
+    const nextPageBtn = document.getElementById('nextPage')
+    const previousPageBtn = document.getElementById('previousPage')
+    nextPageBtn.onclick = nextPage
+    previousPageBtn.onclick = previousPage
+}}
+
+function nextPage(){
+    if (currentPage){
+        currentPage++;
+        fetchPlants(currentPage)
+    }
+}
+function previousPage(){
+    if (currentPage && currentPage >= 2 && currentPage < 5){
+        currentPage--;
+        fetchPlants(currentPage)
+    }
+}
     plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content)
     plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content)
     plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content)
@@ -93,5 +141,6 @@ function fetchUserPlants() {
 
 initApp()
 resetDB()
+
 
 
