@@ -191,3 +191,19 @@ nav div h1 {
 #logo-login {
     max-width: 30%;
 }
+
+#search-container {
+    display: flex;
+    height: 5vh;
+    width: 55vw;
+    margin: 2% auto;
+}
+
+#search {
+    margin-right: 0.2%;
+    width: 100%;
+}
+
+#search-img{
+    width: 5vh;
+}

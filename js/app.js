@@ -55,14 +55,18 @@ function movePage(template) {
         defineLoginOnClicks()
     }
     if (template === "homeTemplate") {
+        document.getElementById("username").innerText += " " + currentUser.name;
         fetchPlants(1)
         defineNavOnClicks()
         defineHomeOnClicks()
         document.getElementById('home-nav').classList.add("current-page");
         document.getElementById('profile-nav').classList.remove("current-page");
+        document.getElementById("search-btn").addEventListener("click", searchPlants);
     }
     if (template === "profileTemplate") {
         fetchUserPlants();
+        document.getElementById("username").innerText += " " + currentUser.name;
+        document.getElementById("profile-header").innerText =  `${currentUser.name}'s Plants`;
         defineNavOnClicks()
         document.getElementById('home-nav').classList.remove("current-page");
         document.getElementById('profile-nav').classList.add("current-page");
@@ -90,7 +94,6 @@ function fetchPlants(pageNum) {
                 attribute: "plants",
                 plant_id: flower.id
             })
-            console.log(rx);
             currentUser.plants = rx._response._content;
             localStorage.setItem("currentUser", JSON.stringify(currentUser));
         }
@@ -144,12 +147,16 @@ function fetchUserPlants() {
             rx.send({
                 plant_id: plant.id
             })
-            console.log(rx);
             plantContainer.removeChild(thisPlant);
             currentUser.plants = rx._response._content;
             localStorage.setItem("currentUser", JSON.stringify(currentUser));
         }
     }
+}
+
+function searchPlants() {
+    const searchInput = document.getElementById("search").value;
+    document.getElementById("search").value = "";
 }
 
 initApp()
