@@ -8,7 +8,7 @@ export function resetDB() {
                 {
                     id: 1,
                     name: "daksjdlasd",
-                    plants: [],
+                    plants: ["/api/plants/1", "/api/plants/3"],
                 }
             ],
         }
