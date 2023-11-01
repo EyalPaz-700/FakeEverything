@@ -23,6 +23,8 @@ function initApp() {
         document.getElementById('home-nav').classList.add("current-page");
         document.getElementById('profile-nav').classList.remove("current-page");
         history.pushState({ page: "home" }, "home", "#" + "home")
+        document.getElementById("search-btn").addEventListener("click", searchPlants);
+
     }
     else {
     document.body.appendChild(templates.loginTemplate.cloneNode(true).content)
