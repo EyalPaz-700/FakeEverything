@@ -113,10 +113,6 @@ function previousPage(){
         currentPage--;
         fetchPlants(currentPage)
     }
-}
-    plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content)
-    plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content)
-    plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content)
 
 }
 
