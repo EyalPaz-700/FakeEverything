@@ -16,11 +16,15 @@ export class Fjax{
     send(content = ""){
         if ( (!content && (this._method === "PUT" || this._method == "GET" || this._method === "DELETE") ) || (content && (this._method === "POST" || this._method === "PUT" || this._method === "DELETE"))){
             const packet = new Packet(this._url, this._method, JSON.stringify(content))
-            this._response = Network.sendRequest(packet)
-            if (this._onload){
-             this._onload.call(this)
-            }
+            this._response = Network.sendRequest(packet, this)
         }
+    }
+    recieve(packet){
+        this._response = packet
+        if (this._onload){
+            this._onload.call(this)
+           }
+
     }
     set onload(f){
         this._onload = f

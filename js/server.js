@@ -6,7 +6,7 @@ const fullTablePattern = /^\/api\/(users|plants)$/
 const singleItemPattern = /^\/api\/(users|plants)\/\d+$/
 
 export const server = {
-    receiveRequest: function (packet) {
+    receiveRequest: function (packet, trafficId) {
         const table = packet._url.split('/')[2]
         const content = JSON.parse(packet._content)
         let responseText;
@@ -64,7 +64,7 @@ export const server = {
         if (!responseText) {
             statusCode = "404";
         }
-        return Network.sendRequest(new Packet("/client/", packet._method, responseText, statusCode))
+        return Network.sendRequest(new Packet("/client/", packet._method, responseText, statusCode), undefined, trafficId)
     }
 
 }

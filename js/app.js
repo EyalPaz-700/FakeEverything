@@ -46,11 +46,7 @@ function defineLoginOnClicks() {
     submitButton.onclick = () => {
         const req = new Fjax()
         req.open('/api/users', 'POST')
-        if (usernameInput.value.trim().length > 0 && passwordInput.value.trim().length > 0) {
-            req.send({
-                userName: usernameInput.value.trim(),
-                password: passwordInput.value.trim()
-            })
+        req._onload = () => {
             if (req._response._content) {
                 currentPage = 1
                 localStorage.setItem("currentUser", JSON.stringify(req._response._content))
@@ -60,6 +56,12 @@ function defineLoginOnClicks() {
             else {
                 alert("invalid username or password")
             }
+        }
+        if (usernameInput.value.trim().length > 0 && passwordInput.value.trim().length > 0) {
+            req.send({
+                userName: usernameInput.value.trim(),
+                password: passwordInput.value.trim()
+            })
         }
         else {
             alert('length can not be zero')
@@ -119,29 +121,37 @@ function fetchPlants(pageNum) {
     plantContainer.innerHTML = ''
     const request = new Fjax()
     request.open("/api/plants", "POST")
-    request.send({
-        pageNum: pageNum
-    })
-    request._response._content.forEach((flower, index) => {
+    request._onload = () => {
+        debugger
+        request._response._content.forEach((flower, index) => {
         plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content)
         plantContainer.children[index].children[0].firstElementChild.src = flower.src;
         plantContainer.children[index].children[1].textContent = flower.name
         plantContainer.children[index].children[2].onclick = () => {
             const rx = new Fjax()
             rx.open("/api/users/" + currentUser.id, "PUT")
+            rx._onload = () => {
+                currentUser.plants = rx._response._content;
+                localStorage.setItem("currentUser", JSON.stringify(currentUser));
+                const confirmMsg = document.getElementById('confirmMsg');
+                confirmMsg.style.animation = 'none';
+                confirmMsg.offsetHeight;
+                confirmMsg.style.animation = null;
+                confirmMsg.style.display = 'block';
+            }
             rx.send({
                 attribute: "plants",
                 plant_id: flower.id
             })
-            currentUser.plants = rx._response._content;
-            localStorage.setItem("currentUser", JSON.stringify(currentUser));
-            const confirmMsg = document.getElementById('confirmMsg');
-            confirmMsg.style.animation = 'none';
-            confirmMsg.offsetHeight;
-            confirmMsg.style.animation = null;
-            confirmMsg.style.display = 'block';
+            debugger
+         
         }
     })
+}
+    request.send({
+        pageNum: pageNum
+    })
+   
 
 
 }
@@ -173,6 +183,7 @@ function nextPage() {
         currentPage++;
         fetchPlants(currentPage)
         document.getElementById("PnumTag").innerText = currentPage;
+        document.getElementById("previousPage").disabled = "";
     }
     if (currentPage == 3) {
         document.getElementById('nextPage').disabled = "true";
@@ -181,6 +192,9 @@ function nextPage() {
 function previousPage() {
     if (currentPage >= 2) {
         currentPage--;
+        if (currentPage == 1) {
+            document.getElementById("previousPage").disabled = "true";
+        } 
         document.getElementById("PnumTag").innerText = currentPage;
         document.getElementById('nextPage').disabled = "";
         fetchPlants(currentPage)
@@ -193,32 +207,41 @@ function fetchUserPlants() {
     const reqUserPlants = new Fjax();
     const userId = JSON.parse(localStorage.getItem("currentUser")).id;
     reqUserPlants.open(`/api/users/${userId}`, "POST");
-    reqUserPlants.send({ prop: "plants" });
-    const userPlants = reqUserPlants._response._content;
-    const x = convertListToMap(userPlants)
-    let i = 0;
-    for (const link in x) {
-        const reqPlant = new Fjax;
-        reqPlant.open(link, "GET");
-        reqPlant.send();
-        const plant = reqPlant._response._content;
-        plantContainer.appendChild(templates.profilePlantTemplate.cloneNode(true).content);
-        const thisPlant = plantContainer.children[i];
-        thisPlant.children[0].firstElementChild.src = plant.src;
-        thisPlant.children[1].innerText = plant.name;
-        thisPlant.children[2].textContent = x[link]
-        thisPlant.children[3].onclick = () => {
-            const rx = new Fjax()
-            rx.open("/api/users/" + currentUser.id, "DELETE")
-            rx.send({
-                plant_id: plant.id
-            })
-            currentUser.plants = rx._response._content;
-            localStorage.setItem("currentUser", JSON.stringify(currentUser));
-            fetchUserPlants()
-        }
-        ++i;
+    reqUserPlants._onload = () => {
+        debugger
+        const userPlants = reqUserPlants._response._content;
+        const x = convertListToMap(userPlants)
+        let i = 0;
+        for (const link in x) {
+            const reqPlant = new Fjax();
+            reqPlant.open(link, "GET");
+            reqPlant._onload = () => {
+                debugger
+                const plant = reqPlant._response._content;
+                plantContainer.appendChild(templates.profilePlantTemplate.cloneNode(true).content);
+                const thisPlant = plantContainer.children[i];
+                thisPlant.children[0].firstElementChild.src = plant.src;
+                thisPlant.children[1].innerText = plant.name;
+                thisPlant.children[2].textContent = x[link]
+                thisPlant.children[3].onclick = () => {
+                    const rx = new Fjax()
+                    rx.open("/api/users/" + currentUser.id, "DELETE")
+                    rx._onload = () => {
+                        currentUser.plants = rx._response._content;
+                        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+                        fetchUserPlants()
+                    }
+                    rx.send({
+                        plant_id: plant.id
+                    })
+        
+                }
+                ++i;
+            }
+            reqPlant.send();
+            }
     }
+    reqUserPlants.send({ prop: "plants" });
 }
 
 function searchPlants() {
@@ -237,38 +260,44 @@ function searchPlants() {
     document.getElementById("search").value = "";
     const MatchPlants = new Fjax();
     MatchPlants.open("/api/plants", "POST");
-    if (colorSrc) {
-        MatchPlants.send({ value: searchInput.toLowerCase(), prop: "color" });
-    } else {
-        MatchPlants.send({ value: searchInput.toLowerCase(), prop: "name" });
-    }
-    const resultPlants = MatchPlants._response._content;
-    plantContainer.innerHTML = "";
-    if (!resultPlants.length) {
+    MatchPlants._onload = () => {
+        const resultPlants = MatchPlants._response._content;
+        plantContainer.innerHTML = "";
+        if (!resultPlants.length) {
         const msgP = document.createElement("p");
         msgP.innerText = "no matching results, sorry :("
         msgP.style = "margin-top: 1%; height: fit-content; padding: 1%; background-color: #ffffffc2";
         plantContainer.appendChild(msgP);
     }
     for (let i = 0; i < resultPlants.length; i++) {
-        plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content);
-        plantContainer.children[i].children[0].firstElementChild.src = resultPlants[i].src;
-        plantContainer.children[i].children[1].innerText = resultPlants[i].name;
-        plantContainer.children[i].children[2].onclick = () => {
-            const rx = new Fjax()
-            rx.open("/api/users/" + currentUser.id, "PUT")
-            rx.send({
-                attribute: "plants",
-                plant_id: resultPlants[i].id
-            })
-            currentUser.plants = rx._response._content;
-            localStorage.setItem("currentUser", JSON.stringify(currentUser));
-            const confirmMsg = document.getElementById('confirmMsg');
-            confirmMsg.style.animation = 'none';
-            confirmMsg.offsetHeight;
-            confirmMsg.style.animation = null;
-            confirmMsg.style.display = 'block';
+            plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content);
+            plantContainer.children[i].children[0].firstElementChild.src = resultPlants[i].src;
+            plantContainer.children[i].children[1].innerText = resultPlants[i].name;
+            plantContainer.children[i].children[2].onclick = () => {
+                const rx = new Fjax()
+                rx.open("/api/users/" + currentUser.id, "PUT")
+                rx._onload = () => {
+                    debugger
+                    currentUser.plants = rx._response._content;
+                    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+                    const confirmMsg = document.getElementById('confirmMsg');
+                    confirmMsg.style.animation = 'none';
+                    confirmMsg.offsetHeight;
+                    confirmMsg.style.animation = null;
+                    confirmMsg.style.display = 'block';
+                }
+                rx.send({
+                    attribute: "plants",
+                    plant_id: resultPlants[i].id
+                })
+               
+            }
         }
+    }
+    if (colorSrc) {
+        MatchPlants.send({ value: searchInput.toLowerCase(), prop: "color" });
+    } else {
+        MatchPlants.send({ value: searchInput.toLowerCase(), prop: "name" });
     }
 }
 
