@@ -1,7 +1,7 @@
 import { Fjax } from "./fjax.js";
 import { resetDB } from "./DB.js";
 
-let currentUser = JSON.parse(localStorage.getItem("currentUser")) 
+let currentUser = JSON.parse(localStorage.getItem("currentUser"))
 let currentPage;
 
 const templates = {
@@ -9,12 +9,12 @@ const templates = {
     loginTemplate: document.getElementById('login-temp'),
     plantTemplate: document.getElementById('plant-temp'),
     profileTemplate: document.getElementById('my-profile-temp'),
-    profilePlantTemplate : document.getElementById('profile-plant-temp')
+    profilePlantTemplate: document.getElementById('profile-plant-temp')
 }
 
 
 function initApp() {
-    if (currentUser){
+    if (currentUser) {
         document.body.appendChild(templates.homeTemplate.cloneNode(true).content)
         fetchPlants(1)
         defineNavOnClicks()
@@ -28,51 +28,50 @@ function initApp() {
 
     }
     else {
-    document.body.appendChild(templates.loginTemplate.cloneNode(true).content)
-    history.pushState({ page: "login" }, "login", "#" + "login")
-    defineLoginOnClicks()
-    window.onhashchange = () => {
-        movePage(history.state.page + "Template")
+        document.body.appendChild(templates.loginTemplate.cloneNode(true).content)
+        history.pushState({ page: "login" }, "login", "#" + "login")
+        defineLoginOnClicks()
+        window.onhashchange = () => {
+            movePage(history.state.page + "Template")
+        }
     }
-}
-    
+
 }
 
 function defineLoginOnClicks() {
     const usernameInput = document.getElementById('username')
-const passwordInput = document.getElementById('password')
-const submitButton = document.getElementById('login-btn')
+    const passwordInput = document.getElementById('password')
+    const submitButton = document.getElementById('login-btn')
 
-submitButton.onclick = () => {
-    const req = new Fjax()
-    req.open('/api/users', 'POST')
-    if (usernameInput.value.trim().length > 0 && passwordInput.value.trim().length > 0 ) 
-    {
-        req.send({
-            userName : usernameInput.value.trim(),
-            password : passwordInput.value.trim()
-        })
-        if (req._response._content){
-            currentPage = 1
-            localStorage.setItem("currentUser", JSON.stringify(req._response._content))
-            currentUser = req._response._content;
-            movePage("homeTemplate")
+    submitButton.onclick = () => {
+        const req = new Fjax()
+        req.open('/api/users', 'POST')
+        if (usernameInput.value.trim().length > 0 && passwordInput.value.trim().length > 0) {
+            req.send({
+                userName: usernameInput.value.trim(),
+                password: passwordInput.value.trim()
+            })
+            if (req._response._content) {
+                currentPage = 1
+                localStorage.setItem("currentUser", JSON.stringify(req._response._content))
+                currentUser = req._response._content;
+                movePage("homeTemplate")
+            }
+            else {
+                alert("invalid username or password")
+            }
         }
         else {
-            alert("invalid username or password")
+            alert('length can not be zero')
         }
     }
-    else {
-        alert('length can not be zero')
-    }
-}
 }
 
 function defineNavOnClicks() {
     const homeNav = document.getElementById('home-nav')
     const profileNav = document.getElementById('profile-nav')
     const logoutNav = document.getElementById('logout-nav')
-    logoutNav.onclick = () => {
+    logoutNav.firstChild.onclick = () => {
         currentUser = undefined
         localStorage.removeItem("currentUser")
         movePage("loginTemplate")
@@ -106,7 +105,7 @@ function movePage(template) {
     if (template === "profileTemplate") {
         fetchUserPlants();
         document.getElementById("username").innerText += " " + currentUser.userName;
-        document.getElementById("profile-header").innerText =  `${currentUser.userName}'s Plants`;
+        document.getElementById("profile-header").innerText = `${currentUser.userName}'s Plants`;
         defineNavOnClicks()
         document.getElementById('home-nav').classList.remove("current-page");
         document.getElementById('profile-nav').classList.add("current-page");
@@ -139,7 +138,7 @@ function fetchPlants(pageNum) {
             const confirmMsg = document.getElementById('confirmMsg');
             confirmMsg.style.animation = 'none';
             confirmMsg.offsetHeight;
-            confirmMsg.style.animation = null; 
+            confirmMsg.style.animation = null;
             confirmMsg.style.display = 'block';
         }
     })
@@ -147,14 +146,15 @@ function fetchPlants(pageNum) {
 
 }
 
-function convertListToMap(arr){
+function convertListToMap(arr) {
     const obj = {}
-    for (const link of arr){
-        if (obj[link]){
+    for (const link of arr) {
+        if (obj[link]) {
             obj[link] += 1
         }
-        else{
-        obj[link] = 1 }
+        else {
+            obj[link] = 1
+        }
     }
     return obj
 }
@@ -173,11 +173,17 @@ function nextPage() {
     if (currentPage < 3) {
         currentPage++;
         fetchPlants(currentPage)
+        document.getElementById("PnumTag").innerText = currentPage;
+    }
+    if (currentPage == 3) {
+        document.getElementById('nextPage').disabled = "true";
     }
 }
 function previousPage() {
-    if ( currentPage >= 2) {
+    if (currentPage >= 2) {
         currentPage--;
+        document.getElementById("PnumTag").innerText = currentPage;
+        document.getElementById('nextPage').disabled = "";
         fetchPlants(currentPage)
     }
 }
@@ -198,7 +204,7 @@ function fetchUserPlants() {
         reqPlant.send();
         const plant = reqPlant._response._content;
         plantContainer.appendChild(templates.profilePlantTemplate.cloneNode(true).content);
-        const thisPlant =  plantContainer.children[i];
+        const thisPlant = plantContainer.children[i];
         thisPlant.children[0].firstElementChild.src = plant.src;
         thisPlant.children[1].innerText = plant.name;
         thisPlant.children[2].textContent = x[link]
@@ -217,15 +223,26 @@ function fetchUserPlants() {
 }
 
 function searchPlants() {
+    document.getElementById("home-footer").style = "display: none;"
     const plantContainer = document.getElementById('item-container')
-    const searchInput = document.getElementById("search").value;
+    let searchInput = document.getElementById("search").value;
     if (!searchInput) {
         return;
+    }
+    let colorSrc = false;
+    if (searchInput.toLowerCase().includes("color:")) {
+        searchInput = searchInput.trim().slice(7);
+        console.log(searchInput);
+        colorSrc = true;
     }
     document.getElementById("search").value = "";
     const MatchPlants = new Fjax();
     MatchPlants.open("/api/plants", "POST");
-    MatchPlants.send({value: searchInput.toLowerCase(), prop: "name"});
+    if (colorSrc) {
+        MatchPlants.send({ value: searchInput.toLowerCase(), prop: "color" });
+    } else {
+        MatchPlants.send({ value: searchInput.toLowerCase(), prop: "name" });
+    }
     const resultPlants = MatchPlants._response._content;
     plantContainer.innerHTML = "";
     for (let i = 0; i < resultPlants.length; i++) {
@@ -244,7 +261,7 @@ function searchPlants() {
             const confirmMsg = document.getElementById('confirmMsg');
             confirmMsg.style.animation = 'none';
             confirmMsg.offsetHeight;
-            confirmMsg.style.animation = null; 
+            confirmMsg.style.animation = null;
             confirmMsg.style.display = 'block';
         }
     }

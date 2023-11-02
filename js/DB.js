@@ -7,8 +7,8 @@ export function resetDB() {
             list: [
                 {
                     id: 1,
-                    userName: "daksjdlasd",
-                    password : "test",
+                    userName: "user",
+                    password : "testpass",
                     plants: ["/api/plants/1", "/api/plants/3"],
                 }
             ],
@@ -42,10 +42,10 @@ export function resetDB() {
             "../media/White_Dutch_irises.jpg",
             "../media/WhiteGazania.JPG"
         ];
-        const plantsNames = ["Alestromeria Aurea", "Clintonia", "Cucko", "Erika Krause", "Desert Rose", "Fox Glove", "Gerbera", "Paeonia", "Rose Amber", "Star Gazer Lily", "Tiger Lily", "Trumpet Vine", "White Dutch Irise", "White Gazania"];
-
+        const plantsNames = ["Pink Alestromeria", "Clintonia", "Cucko", "Erika Krause", "Desert Rose", "Fox Glove", "Gerbera", "Paeonia", "Rose Amber", "Star Gazer Lily", "Tiger Lily", "Trumpet Vine", "White Dutch Irise", "White Gazania"];
+        const plantColors = ["pink", "white", "purple", "pink", "pink", "purple", "pink", "white", "yellow", "pink", "orange", "pink", "orange", "white", "white"];
         for (let i = 0; i < plantsNames.length; i++) {
-            addItem("plants", { name: plantsNames[i], src: plantsSrc[i] });
+            addItem("plants", { name: plantsNames[i], src: plantsSrc[i], color: plantColors[i] });
         }
     }
 }

@@ -30,7 +30,7 @@
 
     <template id="home-temp">
         <div id="home-temp">
-        <div id="confirmMsg">confirmed purchase</div>
+            <div id="confirmMsg">confirmed purchase</div>
             <nav>
                 <div id="hi-user">
                     <h1 id="username">
@@ -38,7 +38,7 @@
                     </h1>
                 </div>
                 <div id="logout-nav">
-                    <h1>
+                    <h1 id="logoutH">
                         Logout
                     </h1>
                 </div>
@@ -59,22 +59,25 @@
             <h1 class="page-title">
                 Oriyal Flowers
             </h1>
-        <div id="search-container">
-            <input type="search" id="search" name="search" placeholder="plant name...">
-            <button id="search-btn">
-                <img id="search-img" src="./media/search.png">
-            </button>
-        </div>
+            <div id="search-container">
+                <input type="search" id="search" name="search" placeholder="plant name...">
+                <button id="search-btn">
+                    <img id="search-img" src="./media/search.png">
+                </button>
+            </div>
             <div id="home-body">
                 <div id="home-body">
                     <div id="item-container">
 
+                    </div>
+                    <div id="home-footer">
+                        <button id="previousPage"> Previous </button>
+                        <div id="page-num">
+                            <p id="PnumTag">1</p>
+                        </div>
+                        <button id="nextPage"> Next </button>
+                    </div>
                 </div>
-                <div id="home-footer">
-                    <button id="previousPage"> Previous </button>
-                    <button id="nextPage"> Next </button>
-                </div>
-            </div>
     </template>
 
     <template id="plant-temp">
@@ -117,7 +120,7 @@
                     </h1>
                 </div>
                 <div id="logout-nav">
-                    <h1>
+                    <h1 id="logoutH">
                         Logout
                     </h1>
                 </div>
@@ -125,6 +128,9 @@
                     <h1>
                         Home
                     </h1>
+                    <!-- <div id="logo-nav">
+                        <img src="./media/cactus-svgrepo-com.svg">
+                    </div> -->
                 </div>
                 <div id="profile-nav">
                     <h1>

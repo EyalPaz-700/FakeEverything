@@ -8,6 +8,7 @@
 body {
     height: 100vh;
     background-color: #A8C69F;
+    background-image: url("./media/Cute-pattern-in-small-flowers-Graphics-24790236-1-580x386.png");
 }
 
 #profile-header {
@@ -25,7 +26,8 @@ body {
     color: white;
     background-color: black;
 }
-.plant h3{
+
+.plant h3 {
     font-size: 1rem;
 }
 
@@ -36,7 +38,7 @@ body {
 
 #home-body {
     position: relative;
-    height: 85%;
+    height: 100%;
     width: 100%;
 }
 
@@ -93,11 +95,14 @@ body {
 }
 
 .page-title {
+    color: #ffffff;
     text-align: center;
     margin-top: 3%;
     text-decoration: underline;
-    font-size: 2.5rem;
+    font-size: 3.5rem;
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.733);
 }
+
 .plant button {
     position: absolute;
     left: 50%;
@@ -153,11 +158,15 @@ nav {
     height: 15%;
     flex-direction: row;
     background-color: #3F612D;
+    position: sticky;
+    top: 0;
+    z-index: 19;
 }
 
-nav>div:not(:first-child):not(:last-child):hover {
-    transition:  background-color 500ms ease;
+nav>div:not(:nth-child(-n+2)):not(:last-child):hover {
+    transition: background-color 500ms ease;
     background-color: #4c863b;
+    cursor: pointer;
 }
 
 .current-page {
@@ -169,11 +178,27 @@ nav div {
     position: relative;
     flex-grow: 1;
     height: 100%;
-    border: 2px solid #233D4D;
+    /* border: 2px solid #233D4D; */
 }
 
-nav #hi-user, #logout-nav {
+nav #hi-user,
+#logout-nav {
     flex-basis: 15%;
+}
+
+#logoutH {
+    background-color: #41841d;
+    border-radius: 3%;
+    padding: 5%;
+}
+
+div#logout-nav {
+    right: 6%;
+}
+
+#logoutH:hover {
+    background-color: #4a9024;
+    cursor: pointer;
 }
 
 nav div h1 {
@@ -216,17 +241,30 @@ nav div h1 {
 
 #search-container {
     display: flex;
-    height: 5vh;
+    height: 6vh;
     width: 55vw;
-    margin: 1% auto;
+    margin: 2% auto 1% auto;
 }
 
 #search {
+    font-size: 1em;
+    padding: 1%;
     margin-right: 0.2%;
     width: 100%;
 }
 
-#search-img{
+#page-num {
+    background-color: #eeeeeee8;
+    height: 60%;
+    width: 42px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    /* align-content: space-between; */
+    align-items: center;
+}
+
+#search-img {
     width: 5vh;
 }
 
@@ -241,7 +279,7 @@ nav div h1 {
     color: white;
     padding: 1%;
     animation-name: confirmP;
-    animation-duration: 3s; 
+    animation-duration: 3s;
     animation-fill-mode: forwards;
 }
 
@@ -250,7 +288,7 @@ nav div h1 {
         transform: translateX(100%);
         opacity: 1;
     }
-    
+
     50% {
         transform: translateX(0);
         opacity: 1;
