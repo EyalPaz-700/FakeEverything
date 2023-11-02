@@ -8,14 +8,14 @@ export function resetDB() {
                 {
                     id: 1,
                     userName: "user",
-                    password : "testpass",
+                    password: "testpass",
                     plants: ["/api/plants/1", "/api/plants/3"],
                 },
                 {
                     id: 2,
                     userName: "moshe",
-                    password : "1234",
-                    plants: [], 
+                    password: "1234",
+                    plants: [],
                 }
             ],
         }
@@ -64,10 +64,10 @@ export function getAll(table) {
     return JSON.parse(localStorage.getItem(table)).list;
 }
 
-export function getUser(username,password){
+export function getUser(username, password) {
     const users = JSON.parse(localStorage.getItem('users')).list
-    for (const user of users){
-        if (user.userName === username && user.password === password){
+    for (const user of users) {
+        if (user.userName === username && user.password === password) {
             return user
         }
     }
@@ -171,7 +171,7 @@ export function removePlant(id, plant_id) {
     const users = data.list;
     for (let user of users) {
         if (user.id == id) {
-            const plantIndex =  user.plants.indexOf(`/api/plants/${plant_id}`);
+            const plantIndex = user.plants.indexOf(`/api/plants/${plant_id}`);
             user.plants.splice(plantIndex, 1);
             localStorage.setItem("users", JSON.stringify(data));
             return user.plants;
