@@ -47,7 +47,7 @@ function defineLoginOnClicks() {
         const req = new Fjax()
         req.open('/api/users', 'POST')
         req._onload = () => {
-            if (req._response._content) {
+            if (req._response._content !== "user does not exist") {
                 currentPage = 1
                 localStorage.setItem("currentUser", JSON.stringify(req._response._content))
                 currentUser = req._response._content;

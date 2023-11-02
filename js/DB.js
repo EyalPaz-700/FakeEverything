@@ -71,7 +71,7 @@ export function getUser(username,password){
             return user
         }
     }
-    return false
+    return "user does not exist"
 }
 
 export function getItem(table, id) {
