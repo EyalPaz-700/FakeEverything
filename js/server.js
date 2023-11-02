@@ -60,7 +60,11 @@ export const server = {
             }
         }
 
-        return Network.sendRequest(new Packet("/client/", packet._method, responseText))
+        let statusCode = "200 OK"
+        if (!responseText) {
+            statusCode = "404";
+        }
+        return Network.sendRequest(new Packet("/client/", packet._method, responseText, statusCode))
     }
 
 }

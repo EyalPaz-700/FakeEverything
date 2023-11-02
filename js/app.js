@@ -71,11 +71,11 @@ function defineNavOnClicks() {
     const homeNav = document.getElementById('home-nav')
     const profileNav = document.getElementById('profile-nav')
     const logoutNav = document.getElementById('logout-nav')
-    logoutNav.firstChild.onclick = () => {
+    logoutNav.addEventListener("click", () => {
         currentUser = undefined
         localStorage.removeItem("currentUser")
         movePage("loginTemplate")
-    }
+    })
     homeNav.onclick = () => {
         movePage("homeTemplate")
     }
@@ -169,7 +169,6 @@ function defineHomeOnClicks() {
 }
 
 function nextPage() {
-    debugger
     if (currentPage < 3) {
         currentPage++;
         fetchPlants(currentPage)
@@ -245,6 +244,12 @@ function searchPlants() {
     }
     const resultPlants = MatchPlants._response._content;
     plantContainer.innerHTML = "";
+    if (!resultPlants.length) {
+        const msgP = document.createElement("p");
+        msgP.innerText = "no matching results, sorry :("
+        msgP.style = "margin-top: 1%; height: fit-content; padding: 1%; background-color: #ffffffc2";
+        plantContainer.appendChild(msgP);
+    }
     for (let i = 0; i < resultPlants.length; i++) {
         plantContainer.appendChild(templates.plantTemplate.cloneNode(true).content);
         plantContainer.children[i].children[0].firstElementChild.src = resultPlants[i].src;
