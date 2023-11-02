@@ -184,6 +184,8 @@ function nextPage() {
         fetchPlants(currentPage)
         document.getElementById("PnumTag").innerText = currentPage;
         document.getElementById("previousPage").disabled = "";
+        document.getElementById("page-title").scrollIntoView({behavior: 'smooth'});
+
     }
     if (currentPage == 3) {
         document.getElementById('nextPage').disabled = "true";
@@ -197,6 +199,7 @@ function previousPage() {
         } 
         document.getElementById("PnumTag").innerText = currentPage;
         document.getElementById('nextPage').disabled = "";
+        document.getElementById("page-title").scrollIntoView({behavior: 'smooth'});
         fetchPlants(currentPage)
     }
 }
